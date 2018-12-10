@@ -1,0 +1,320 @@
+<div class="layui-form" lay-filter="layuiadmin-form-people" style="padding: 20px 30px 0 0;">
+   <div class="layui-form-item">
+    <label class="layui-form-label">选择门票</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template lay-url="{{layui.setter.public_url}}/people/get_ticket" lay-type="post" lay-done="layui.form.render('select');">
+          <select name="tid">
+         {{# 
+          var dataName = layui.setter.response.dataName;
+          layui.each(d[dataName], function(index, item){ }}
+            <option value="{{item.id}}"  {{ d.params.tid === item.id ? 'selected' : '' }}>{{item.name}}</option>
+        {{#  }); }}
+        </select>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">参会类别</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template lay-url="{{layui.setter.public_url}}/people/get_type" lay-type="post" lay-done="layui.form.render('select');">
+          <select name="typeid">
+         {{# 
+          var dataName = layui.setter.response.dataName;
+          layui.each(d[dataName], function(index, item){ }}
+            <option value="{{item.id}}"  {{ d.params.typeid === item.id ? 'selected' : '' }}>{{item.name}}</option>
+        {{#  }); }}
+        </select>
+      </script>
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">姓名</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="name" value="{{ d.params.name || '' }}" lay-verify="required" placeholder="请输入姓名" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">手机号</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="number" name="phone" value="{{ d.params.phone || '' }}" lay-verify="required" placeholder="请输入手机号" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">总费用</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="number" name="money" value="{{ d.params.money || '' }}" lay-verify="required" placeholder="请输入总费用" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">人数</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="number" name="num" value="{{ d.params.num || '' }}" lay-verify="required" placeholder="请输入人数" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">单位</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="unit" value="{{ d.params.unit || '' }}" placeholder="请输入单位" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">职位</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="title" value="{{ d.params.title || '' }}"  placeholder="请输入职位" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">部门</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="dept" value="{{ d.params.dept || '' }}"  placeholder="请输入部门" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">邮箱</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="email" value="{{ d.params.email || '' }}"  placeholder="请输入邮箱" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">身份证号码</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="card" value="{{ d.params.card || '' }}" lay-verify="required" placeholder="请输入身份证号码" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">会员信息</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <select name="vip">
+            <option value="0"  {{ d.params.vip === 0 ? 'selected' : '' }}>普通会员</option>
+            <option value="1"  {{ d.params.vip === 2? 'selected' : '' }}>乐享达人</option>
+            <option value="2"  {{ d.params.vip === 2? 'selected' : '' }}>阅读达人</option>
+            <option value="3"  {{ d.params.vip === 3 ? 'selected' : '' }}>医杰汇会员</option>
+        </select>
+      </script>
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">支付类型</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+          <select name="pay_type">
+            <option value="刷卡"  {{ d.params.vip === '刷卡' ? 'selected' : '' }}>刷卡</option>
+            <option value="现场缴费"  {{ d.params.vip === '现场缴费' ? 'selected' : '' }}>现场缴费</option>
+            <option value="对公转账/银行汇款"  {{ d.params.vip === '对公转账/银行汇款' ? 'selected' : '' }}>对公转账/银行汇款</option>
+            <option value="支付宝支付"  {{ d.params.vip === '支付宝支付' ? 'selected' : '' }}>支付宝支付</option>
+            <option value="微信支付"  {{ d.params.vip === '微信支付' ? 'selected' : '' }}>微信支付</option>
+            <option value="其他"  {{ d.params.vip === '其他' ? 'selected' : '' }}>其他</option>
+            <option value="免费"  {{ d.params.vip === '免费' ? 'selected' : '' }}>免费</option>
+        </select>
+      </script>
+    </div>
+  </div>
+<!--    <div class="layui-form-item">
+    <label class="layui-form-label">收据编号</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="number" value="{{ d.params.number || '' }}"  placeholder="请输入收据编号" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div> -->
+   <div class="layui-form-item">
+    <label class="layui-form-label">是否支付</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="checkbox" lay-filter="switch" name="is_pay" {{ d.params.is_pay == 2 ? 'checked' : '' }} lay-skin="switch" lay-text="是|否">
+      </script>
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">是否签到</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="checkbox" lay-filter="switch" name="is_sign" {{ d.params.is_sign == 2 ? 'checked' : '' }} lay-skin="switch" lay-text="是|否">
+      </script>
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">是否领取资料</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="checkbox" lay-filter="switch" name="is_file" {{ d.params.is_file == 2 ? 'checked' : '' }} lay-skin="switch" lay-text="是|否">
+      </script>
+    </div>
+  </div>
+ <!--  <div class="layui-form-item">
+    <label class="layui-form-label">是否住宿</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="checkbox" lay-filter="switch" name="status" {{ d.params.status == 2? 'checked' : '' }} lay-skin="switch" lay-text="是|否">
+      </script>
+    </div>
+  </div> -->
+   <div class="layui-form-item">
+    <label class="layui-form-label">是否需要发票</label>
+    <div class="layui-input-inline fp">
+      <script type="text/html" template>
+        <input type="checkbox" lay-filter="switch" name="is_fp" {{ d.params.is_fp == 2? 'checked' : '' }} lay-skin="switch" lay-text="是|否">
+      </script>
+    </div>
+  </div>
+  <div id="fp" >
+         <div class="layui-form-item">
+          <label class="layui-form-label">发票类型</label>
+          <div class="layui-input-inline">
+            <script type="text/html" template>
+              <input type="text" name="username" value="{{ d.params.username || '' }}"  placeholder="请输入登录名" autocomplete="off" class="layui-input">
+            </script>
+          </div>
+        </div>
+         <div class="layui-form-item">
+          <label class="layui-form-label">发票抬头</label>
+          <div class="layui-input-inline">
+            <script type="text/html" template>
+              <input type="text" name="username" value="{{ d.params.username || '' }}"  placeholder="请输入登录名" autocomplete="off" class="layui-input">
+            </script>
+          </div>
+        </div>
+         <div class="layui-form-item">
+          <label class="layui-form-label">纳税人识别号</label>
+          <div class="layui-input-inline">
+            <script type="text/html" template>
+              <input type="text" name="username" value="{{ d.params.username || '' }}"  placeholder="请输入登录名" autocomplete="off" class="layui-input">
+            </script>
+          </div>
+        </div>
+         <div class="layui-form-item">
+          <label class="layui-form-label">注册地址</label>
+          <div class="layui-input-inline">
+            <script type="text/html" template>
+              <input type="text" name="username" value="{{ d.params.username || '' }}"  placeholder="请输入登录名" autocomplete="off" class="layui-input">
+            </script>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">注册电话</label>
+          <div class="layui-input-inline">
+            <script type="text/html" template>
+              <input type="text" name="username" value="{{ d.params.username || '' }}"  placeholder="请输入登录名" autocomplete="off" class="layui-input">
+            </script>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">开户行</label>
+          <div class="layui-input-inline">
+            <script type="text/html" template>
+              <input type="text" name="username" value="{{ d.params.username || '' }}"  placeholder="请输入登录名" autocomplete="off" class="layui-input">
+            </script>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">账号</label>
+          <div class="layui-input-inline">
+            <script type="text/html" template>
+              <input type="text" name="username" value="{{ d.params.username || '' }}"  placeholder="请输入登录名" autocomplete="off" class="layui-input">
+            </script>
+          </div>
+        </div>
+         <div class="layui-form-item">
+          <label class="layui-form-label">发票内容</label>
+          <div class="layui-input-inline">
+            <script type="text/html" template lay-url="{{layui.setter.public_url}}/auth/rule" lay-type="post" lay-done="layui.form.render('select');">
+                <select name="role">
+               {{# 
+                var dataName = layui.setter.response.dataName;
+                layui.each(d[dataName], function(index, item){ }}
+                  <option value="{{item.id}}"  {{ d.params.rule === item.name ? 'selected' : '' }}>{{item.level}} {{item.name}}</option>
+              {{#  }); }}
+              </select>
+            </script>
+          </div>
+        </div>
+
+        <div class="layui-form-item">
+          <label class="layui-form-label">领取方式</label>
+          <div class="layui-input-inline">
+            <script type="text/html" template>
+              <input type="text" name="username" value="{{ d.params.username || '' }}"  placeholder="请输入登录名" autocomplete="off" class="layui-input">
+            </script>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">收件人</label>
+          <div class="layui-input-inline">
+            <script type="text/html" template>
+              <input type="text" name="username" value="{{ d.params.username || '' }}" placeholder="请输入登录名" autocomplete="off" class="layui-input">
+            </script>
+          </div>
+        </div>
+          <div class="layui-form-item">
+          <label class="layui-form-label">收件人手机号</label>
+          <div class="layui-input-inline">
+            <script type="text/html" template>
+              <input type="text" name="username" value="{{ d.params.username || '' }}"  placeholder="请输入登录名" autocomplete="off" class="layui-input">
+            </script>
+          </div>
+        </div>
+          <div class="layui-form-item">
+          <label class="layui-form-label">邮寄地址</label>
+          <div class="layui-input-inline">
+            <script type="text/html" template>
+              <input type="text" name="username" value="{{ d.params.username || '' }}" placeholder="请输入登录名" autocomplete="off" class="layui-input">
+            </script>
+          </div>
+        </div>
+          <div class="layui-form-item">
+          <label class="layui-form-label">领取发票</label>
+          <div class="layui-input-inline">
+            <script type="text/html" template>
+              <input type="text" name="username" value="{{ d.params.username || '' }}"  placeholder="请输入登录名" autocomplete="off" class="layui-input">
+            </script>
+
+          </div>
+        </div>
+  </div>
+   <script type="text/html" template>
+      <input type="hidden" name="id" value="{{ d.params.id || '' }}">
+    </script>
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-user-back-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+
+<script>
+$('#fp').hide();
+
+$('.fp').click(function(){
+  var status = $(this).find('em').text();
+  if(status == '是'){
+    $('#fp').show();
+  }else{
+    $('#fp').hide();
+  }
+})
+layui.use(['admin', 'form'], function(){
+  var $ = layui.$
+  ,form = layui.form;
+
+});
+</script>

@@ -1,0 +1,257 @@
+<title>会议管理</title>
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>嘉宾管理</cite></a>
+    <a><cite>嘉宾列表</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid">   
+  <div class="layui-row layui-col-space10 demo-list">
+  
+    
+    <div class="layui-card-body">
+      
+        <div class="layui-col-xs6">
+        <div class="layui-card">
+          <div class="layui-card-header">嘉宾列表</div>
+          <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-guest-formlist">
+          <div class="layui-form-item">
+            <div class="layui-inline">
+              <label class="layui-form-label">嘉宾名称</label>
+              <div class="layui-input-block">
+                <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-inline">
+              <button class="layui-btn layuiadmin-btn-admin" lay-submit lay-filter="LAY-user-back-search">
+                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+              </button>
+            </div>
+          </div>
+          </div>
+          <div style="padding: 20px;">
+          <button class="layui-btn layuiadmin-btn-admin layui-btn-danger" data-type="batchdel">删除</button>
+          <button class="layui-btn layuiadmin-btn-admin" data-type="add">添加</button>
+          <button class="layui-btn layuiadmin-btn-admin" data-type="add_info">加入会议</button>
+          </div>
+          <div class="layui-card-body">
+            <table id="LAY-user-back-manage" class="layui-hide" lay-filter="LAY-user-back-manage"></table>  
+          </div>
+        </div>
+      </div>
+
+
+      <div class="layui-col-xs6">
+        <div class="layui-card">
+          <div class="layui-card-header">会议嘉宾</div>
+          <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-guest-formlist">
+          <div class="layui-form-item">
+            <div class="layui-inline">
+              <label class="layui-form-label">嘉宾名称</label>
+              <div class="layui-input-block">
+                <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <button class="layui-btn layuiadmin-btn-admin" lay-submit lay-filter="LAY-user-back-searchs">
+                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+              </button>
+            </div>
+          </div>
+          </div>
+          <div style="padding: 20px;">
+          <button class="layui-btn layuiadmin-btn-admin layui-btn-danger" data-type="batchdels">移除</button>
+          </div>
+          <div class="layui-card-body">
+            <table id="LAY-user-back-manages" class="layui-hide" lay-filter="LAY-user-back-manages"></table>  
+          </div>
+        </div>
+      </div>
+      
+
+      <script type="text/html" id="sex">
+        {{#  if(d.sex == 1){ }}
+          <button class="layui-btn layui-btn-xs">男</button>
+        {{#  } else { }}
+          <button class="layui-btn layui-btn-warm layui-btn-xs">女</button>
+        {{#  } }}
+      </script>
+        <script type="text/html" id="sexs">
+        {{#  if(d.guest.sex == 1){ }}
+          <button class="layui-btn layui-btn-xs">男</button>
+        {{#  } else { }}
+          <button class="layui-btn layui-btn-warm layui-btn-xs">女</button>
+        {{#  } }}
+      </script>
+       <script type="text/html" id="imgTpl"> 
+        <img style="display: inline-block; " src= "{{ d.headimg }}?x-oss-process=image/resize,h_300,w_300"">
+      </script>
+      <script type="text/html" id="table-guest-admin">
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+      </script>
+    </div>
+  </div>
+</div>
+
+<script>
+layui.use('guest', layui.factory('guest')).use(['admin', 'guest', 'table'], function(){
+  var $ = layui.$
+  ,admin = layui.admin
+  ,view = layui.view
+  ,table = layui.table
+  ,form = layui.form;
+  
+  form.render(null, 'layadmin-guest-formlist');
+  
+  //监听搜索
+  form.on('submit(LAY-user-back-search)', function(data){
+    var field = data.field;
+    
+    //执行重载
+    table.reload('LAY-user-back-manage', {
+      where: field
+    });
+  });
+    //监听搜索
+  form.on('submit(LAY-user-back-searchs)', function(data){
+    var field = data.field;
+    
+    //执行重载
+    table.reload('LAY-user-back-manages', {
+      where: field
+    });
+  });
+ //事件
+  var active = {
+    batchdel: function(){
+      var checkStatus = table.checkStatus('LAY-user-back-manage')
+      ,checkData = checkStatus.data; //得到选中的数据
+
+      if(checkData.length === 0){
+        return layer.msg('请选择数据');
+      }
+      var ids = '';
+      for(var i=0;i<checkData.length;i++){
+        ids+=checkData[i].id+',';
+      }
+      ids = ids.substr(0, ids.length - 1);
+      // layer.prompt({
+      //   formType: 1
+      //   ,title: '敏感操作，请验证口令'
+      // }, function(value, index){
+      //   layer.close(index);
+        layer.confirm('确定删除吗？', function(index) {
+          //执行 Ajax 后重载
+                admin.req({
+                  url:  layui.setter.public_url+'/guest/del' //实际使用请改成服务端真实接口
+                  ,data: {ids:ids}
+                  ,type:'post'
+                  ,done: function(res){
+                    table.reload('LAY-user-back-manage');
+                    layer.msg('已删除');
+                  }
+                }); 
+        });
+    }
+    ,batchdels: function(){
+      var checkStatus = table.checkStatus('LAY-user-back-manages')
+      ,checkData = checkStatus.data; //得到选中的数据
+
+      if(checkData.length === 0){
+        return layer.msg('请选择数据');
+      }
+      var ids = '';
+      for(var i=0;i<checkData.length;i++){
+        ids+=checkData[i].id+',';
+      }
+      ids = ids.substr(0, ids.length - 1);
+          //执行 Ajax 后重载
+        admin.req({
+          url:  layui.setter.public_url+'/guest/del_info' //实际使用请改成服务端真实接口
+          ,data: {ids:ids}
+          ,type:'post'
+          ,done: function(res){
+            table.reload('LAY-user-back-manages');
+             table.reload('LAY-user-back-manage');
+            layer.msg('已移除');
+          }
+        }); 
+    }
+    ,add_info: function(){
+      var checkStatus = table.checkStatus('LAY-user-back-manage')
+      ,checkData = checkStatus.data; //得到选中的数据
+
+      if(checkData.length === 0){
+        return layer.msg('请选择数据');
+      }
+      var ids = '';
+      for(var i=0;i<checkData.length;i++){
+        ids+=checkData[i].id+',';
+      }
+      ids = ids.substr(0, ids.length - 1);
+          //执行 Ajax 后重载
+        admin.req({
+          url:  layui.setter.public_url+'/guest/add_info' //实际使用请改成服务端真实接口
+          ,data: {ids:ids}
+          ,type:'post'
+          ,done: function(res){
+            table.reload('LAY-user-back-manages');
+             table.reload('LAY-user-back-manage');
+            layer.msg('已加入');
+          }
+        }); 
+    }
+    ,add: function(){
+      admin.popup({
+        title: '添加参会人员'
+        ,area: ['700px', '750px']
+        ,id: 'LAY-popup-useradmin-add'
+        ,success: function(layero, index){
+          view(this.id).render('guest/guestform').done(function(){
+            layui.use(['layedit'], function(){
+            var $ = layui.$
+            ,form = layui.form
+            ,upload = layui.upload
+            ,layedit = layui.layedit;
+            
+            layedit.build('content'); //建立编辑器
+            layedit.build('econtent'); //建立编辑器
+          });
+            
+            form.render(null, 'layuiadmin-form-guest');
+            //监听提交
+            form.on('submit(LAY-user-back-submit)', function(data){
+              var field = data.field; //获取提交的字段
+                //请求登入接口
+                admin.req({
+                  url:  layui.setter.public_url+'/guest/add' //实际使用请改成服务端真实接口
+                  ,data: field
+                  ,type:'post'
+                  ,done: function(res){
+                    //登入成功的提示与跳转
+                    layer.msg('添加成功', {
+                      offset: '15px'
+                      ,icon: 1
+                      ,time: 1000
+                    }, function(){
+                        layui.table.reload('LAY-user-back-manage'); //重载表格
+                        layer.close(index); //执行关闭 
+                    });
+                  }
+                }); 
+            });
+          });
+        }
+      });
+    }
+  }  
+  $('.layui-btn.layuiadmin-btn-admin').on('click', function(){
+    var type = $(this).data('type');
+    active[type] ? active[type].call(this) : '';
+  });
+});
+</script>

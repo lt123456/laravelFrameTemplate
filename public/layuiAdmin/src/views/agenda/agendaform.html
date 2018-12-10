@@ -1,0 +1,111 @@
+<style>
+  .layui-upload-img{width: 92px; height: 92px; margin: 0 10px 10px 0;}
+  </style>
+<div class="layui-form" lay-filter="layuiadmin-form-agenda" style="padding: 20px 30px 0 0;">
+
+   <div class="layui-form-item">
+    <label class="layui-form-label">标题</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="title" value="{{ d.params.title || '' }}" lay-verify="required" placeholder="请输入会议名称" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+<!--   -->
+    <div class="layui-form-item">
+      <div class="layui-inline">
+        <label class="layui-form-label">活动日期</label>
+        <div class="layui-input-inline">
+          <script type="text/html" template>
+           <input type="text" class="layui-input" id="test-laydate-start" placeholder="活动日期" lay-verify="required" name="date" value="{{ d.params.date || '' }}">
+          </script>
+        </div>
+        <div class="layui-form-mid">
+          -
+        </div>
+        <div class="layui-input-inline">
+           <script type="text/html" template>
+          <input type="text" class="layui-input" id="test-laydate-range-time" placeholder="开始时间" lay-verify="required" name="startime" value="{{ d.params.startime || '' }}">
+          </script>
+        </div>
+         <div class="layui-form-mid">
+          -
+        </div>
+          <div class="layui-input-inline">
+           <script type="text/html" template>
+          <input type="text" class="layui-input" id="test-laydate-range-times" placeholder="结束时间" lay-verify="required" name="endtime" value="{{ d.params.endtime || '' }}">
+          </script>
+        </div>
+      </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">备注</label>
+    <div class="layui-input-inline" style="width: 350px">
+      <script type="text/html" template>
+         <textarea name="remark" class="layui-textarea" id="remark" >{{ d.params.remark || '' }}</textarea>
+      </script>
+    </div>
+  </div> 
+    <div class="layui-form-item">
+    <label class="layui-form-label">排序</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="number" name="sort" value="{{ d.params.sort || '' }}" lay-verify="required" placeholder="请输入排序" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+     <div class="layui-form-item">
+    <label class="layui-form-label">状态</label>
+    <div class="layui-input-inline fp">
+      <script type="text/html" template>
+        <input type="checkbox" lay-filter="switch" name="display" {{ d.params.display == 1 ? 'checked' : '' }} lay-skin="switch" lay-text="正常|禁用">
+      </script>
+    </div>
+  </div>
+   <script type="text/html" template>
+      <input type="hidden" name="id" value="{{ d.params.id || '' }}">
+   </script>
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-user-back-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+<script>
+ 
+layui.use(['admin', 'form','laydate','layedit','upload'], function(){
+  var layedit = layui.layedit;
+  var laydate = layui.laydate;
+  var $ = layui.$
+  ,form = layui.form
+  ,upload = layui.upload;
+    layedit.set({
+    uploadImage: {
+        url: layui.setter.public_url+'/api/content_upload' //接口url
+        ,type: 'post' //默认post
+        ,done: function(res){
+        //如果上传失败
+          if(res.code > 0){
+            return layer.msg('上传失败');
+          }
+          //上传成功
+          $('input[name="pc_img"]').val(res.data.url)
+        }  
+      }
+    });
+  // var index = layedit.build('content'); //建立编辑器
+  // var index1= layedit.build('address_content'); //建立编辑器
+
+  // form.verify({
+  //     content: function(value){
+  //         layedit.sync(index);
+  //     }
+  //     ,address_content: function(value){
+  //         layedit.sync(index1);
+  //     }
+  // });
+
+
+});
+</script>

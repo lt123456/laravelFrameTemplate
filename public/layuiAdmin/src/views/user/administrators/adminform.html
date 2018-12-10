@@ -1,0 +1,74 @@
+<div class="layui-form" lay-filter="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">登录名</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="username" value="{{ d.params.username || '' }}" lay-verify="required" placeholder="请输入登录名" autocomplete="off" class="layui-input" {{ d.params.id ?'disabled':''}}>
+      </script>
+    </div>
+  </div>
+  <script type="text/html" template>
+    <div class="layui-form-item">
+      <label class="layui-form-label">密码</label>
+      <div class="layui-input-inline">
+          <input type="password" name="pwd" lay-verify="required" placeholder="请输入密码" value="{{ d.params.pwd || '' }}" autocomplete="off" class="layui-input" {{ d.params.id ?'disabled':''}}>
+      </div>
+    </div>
+  </script>
+
+    <div class="layui-form-item">
+    <label class="layui-form-label">昵称</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="nickname" value="{{ d.params.nickname || '' }}" lay-verify="required" placeholder="请输入昵称" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">备注</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+         <textarea name="remark" placeholder="请输入备注" class="layui-textarea" autocomplete="off" >{{ d.params.remark || '' }}</textarea>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">角色</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template lay-url="{{layui.setter.public_url}}/auth/rule" lay-type="post" lay-done="layui.form.render('select');">
+          <select name="role">
+         {{# 
+          var dataName = layui.setter.response.dataName;
+          layui.each(d[dataName], function(index, item){ }}
+            <option value="{{item.id}}"  {{ d.params.rule === item.name ? 'selected' : '' }}>{{item.level}} {{item.name}}</option>
+        {{#  }); }}
+        </select>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">状态</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="checkbox" lay-filter="switch" name="status" {{ d.params.status == 1 ? 'checked' : '' }} lay-skin="switch" lay-text="正常|不显示">
+      </script>
+    </div>
+  </div>
+   <script type="text/html" template>
+      <input type="hidden" name="id" value="{{ d.params.id || '' }}">
+    </script>
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-user-back-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+
+<script>
+layui.use(['admin', 'form'], function(){
+  var $ = layui.$
+  ,form = layui.form;
+
+});
+</script>

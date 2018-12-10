@@ -1,0 +1,96 @@
+<title>管理员日志</title>
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>权限管理</cite></a>
+    <a><cite>管理员日志管理</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid">   
+  <div class="layui-card">
+    <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-useradmin-formlist">
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label">操作人</label>
+          <div class="layui-input-block">
+            <input type="text" name="admin_name" placeholder="请输入" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+       <!--  <div class="layui-inline">
+          <label class="layui-form-label">角色</label>
+          <div class="layui-input-block">
+            <select name="role">
+              <option value="0">管理员</option>
+              <option value="1">超级管理员</option>
+              <option value="2">纠错员</option>
+              <option value="3">采购员</option>
+              <option value="4">推销员</option>
+              <option value="5">运营人员</option>
+              <option value="6">编辑</option>
+            </select>
+          </div>
+        </div> -->
+        <div class="layui-inline">
+          <button class="layui-btn layuiadmin-btn-admin" lay-submit lay-filter="LAY-user-log-search">
+            <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="layui-card-body">
+    <!--   <div style="padding-bottom: 10px;">
+        <button class="layui-btn layuiadmin-btn-admin layui-btn-danger" data-type="batchdel">删除</button>
+        <button class="layui-btn layuiadmin-btn-admin" data-type="add">添加</button>
+      </div>
+       -->
+      <table id="LAY-user-log-manage" lay-filter="LAY-user-log-manage"></table>  
+    </div>
+  </div>
+</div>
+
+<script>
+layui.define(['table', 'form'], function(exports){
+  var $ = layui.$
+  ,admin = layui.admin
+  ,view = layui.view
+  ,table = layui.table
+  ,form = layui.form;
+
+  //管理员管理
+  table.render({
+    elem: '#LAY-user-log-manage'
+    ,url: layui.setter.public_url+'/adminlog/list'
+    ,method:'post'
+    ,headers: {
+    accesstoken: layui.data('layuiAdmin').accesstoken
+    }
+    // ,totalRow: true //开启合计行
+    ,cols: [[
+      {type: 'checkbox', fixed: 'left'}
+      ,{field: 'id', width: 80, title: 'ID', sort: true}
+      ,{field: 'admin_name', title: '操作人'}
+      ,{field: 'url', title: '操作页面'}
+      ,{field: 'log_name', title: '标题'}
+      ,{field: 'log_content', title: '内容'}
+      ,{field: 'ip', title: '操作IP'}
+      ,{field: 'useragent', title: 'useragent'}
+      ,{field: 'addtime', title: '操作时间',width:180}
+    ]]
+    ,page: true
+    ,text: {
+    none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+  }
+  });
+  //监听搜索
+  form.on('submit(LAY-user-log-search)', function(data){
+    var field = data.field;
+    
+    //执行重载
+    table.reload('LAY-user-log-manage', {
+      where: field
+    });
+  });
+  });
+</script>

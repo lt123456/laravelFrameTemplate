@@ -1,0 +1,99 @@
+<div class="layui-form" lay-filter="layuiadmin-form-rule" style="padding: 20px 30px 0 0;">
+  <div class="layui-form-item">
+          <label class="layui-form-label">是否菜单</label>
+          <div class="layui-input-block">
+            <script type="text/html" template>
+            <input type="radio" name="ismenu" value="1" title="是" {{ d.params.ismenu == 1 ? 'checked' : '' }} checked="">
+            <input type="radio" name="ismenu" value="2" title="否" {{ d.params.ismenu == 2 ? 'checked' : '' }}>
+          </script>
+          </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">父级菜单</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template lay-url="{{layui.setter.public_url}}/rule/list" lay-type="post" lay-done="layui.form.render('select');">
+          <select name="pid" lay-filter="provSel">
+            <option value="0">顶级菜单</option>
+         {{# 
+          var dataName = layui.setter.response.dataName;
+          layui.each(d[dataName], function(index, item){ }}
+          {{# if(item.id != d.params.id){ }}
+            {{# if(item.level !== '└└└'){ }}
+              <option value="{{item.id}}"  {{ d.params.pid === item.id ? 'selected' : '' }}>{{item.level}} {{item.name}}</option>
+            {{#  } }}
+          {{#  } }}
+        {{#  }); }}
+        </select>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">菜单名称</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="name" value="{{ d.params.name || '' }}" lay-verify="required" placeholder="请输入菜单名称" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+
+    <div class="layui-form-item">
+    <label class="layui-form-label">规则</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="url" value="{{ d.params.url || '' }}" lay-verify="required" placeholder="请输入规则" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+ <!--  <div class="layui-form-item">
+    <label class="layui-form-label">图标</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="icon" value="{{ d.params.icon || '' }}" lay-verify="required" placeholder="请输入图标" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+ -->
+<div class="layui-form-item">
+    <label class="layui-form-label">权重</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="number" name="weight" value="{{ d.params.weight || 0 }}" lay-verify="required|number"  placeholder="请输入权重" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">备注</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+         <textarea name="remark" placeholder="请输入备注" class="layui-textarea" autocomplete="off" >{{ d.params.remark || '' }}</textarea>
+      </script>
+    </div>
+  </div>
+
+   <div class="layui-form-item">
+    <label class="layui-form-label">状态</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="checkbox" lay-filter="switch" name="status" {{ d.params.status == 1 ? 'checked' : '' }} lay-skin="switch" lay-text="正常|不显示">
+      </script>
+    </div>
+  </div>
+   <script type="text/html" template>
+      <input type="hidden" name="id" value="{{ d.params.id || '' }}">
+    </script>
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-user-back-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+
+<script>
+layui.use(['admin', 'form'], function(){  
+  var $ = layui.$
+  ,form = layui.form;
+
+});
+</script>

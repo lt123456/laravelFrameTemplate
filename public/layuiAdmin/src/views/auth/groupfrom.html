@@ -1,0 +1,170 @@
+<div class="layui-form" lay-filter="layuiadmin-form-role" style="padding: 20px 30px 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">父级角色</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template lay-url="{{layui.setter.public_url}}/auth/rule" lay-type="post" lay-done="layui.form.render('select');">
+          <select name="pid" lay-filter="provSel">
+            <option value="0">顶级权限</option>
+         {{# 
+          var dataName = layui.setter.response.dataName;
+          layui.each(d[dataName], function(index, item){ }}
+          {{# if(item.id != d.params.id){ }}
+            <option value="{{item.id}}"  {{ d.params.pid === item.id ? 'selected' : '' }}>{{item.level}} {{item.name}}</option>
+          {{#  } }}
+        {{#  }); }}
+        </select>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">角色名</label>
+    <div class="layui-input-block">
+      <script type="text/html" template>
+        <input type="text" name="name" value="{{ d.params.name || '' }}" lay-verify="required" placeholder="请输入角色名" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">权限范围</label>
+    <div class="layui-input-block">
+      <button type="button" class="layui-btn layui-btn-primary" onclick="showAll('#LAY-auth-tree-index')">全部展开</button>
+      <button type="button" class="layui-btn layui-btn-primary" onclick="closeAll('#LAY-auth-tree-index')">全部隐藏</button>
+            <div id="LAY-auth-tree-index">
+              <script type="text/html" template lay-url="{{layui.setter.public_url}}/auth/groupmenu" lay-type="post" lay-data="{id: '{{ d.params.id }}'}" lay-done="layui.data.done(d);">
+              </script>
+            </div>
+      </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">具体描述</label>
+    <div class="layui-input-block">
+      <script type="text/html" template>
+        <textarea type="text" name="remark" lay-verify="required" autocomplete="off" class="layui-textarea">{{ d.params.remark || '' }}</textarea>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">状态</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="checkbox" lay-filter="switch" name="status" {{ d.params.status == 1 ? 'checked' : '' }} lay-skin="switch" lay-text="正常|不显示">
+      </script>
+    </div>
+  </div>
+  <script type="text/html" template>
+      <input type="hidden" name="ids" value="{{ d.params.id || '' }}" id="ids">
+  </script>
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-user-role-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+
+<script>
+  // 显示全部
+function showAll(dst){
+  layui.use(['jquery', 'layer', 'authtree'], function(){
+    var layer = layui.layer;
+    var authtree = layui.authtree;
+
+    authtree.showAll(dst);
+  });
+}
+// 隐藏全部
+function closeAll(dst){
+  layui.use(['jquery', 'layer', 'authtree'], function(){
+    var layer = layui.layer;
+    var authtree = layui.authtree;
+
+    authtree.closeAll(dst);
+  });
+}
+layui.data.done = function(res){
+  layui.use(['admin', 'authtree', 'form'], function(){
+    var $ = layui.$
+    ,form = layui.form
+    ,admin = layui.admin
+    var authtree = layui.authtree;
+    var form = layui.form;
+        // 渲染时传入渲染目标ID，树形结构数据（具体结构看样例，checked表示默认选中），以及input表单的名字
+          authtree.render('#LAY-auth-tree-index', res.data, {
+          inputname: 'rules[]'
+          ,layfilter: 'lay-check-auth'
+          // ,autoclose: false
+          // ,autochecked: false
+          // ,openchecked: true
+          ,openall: true
+          ,autowidth: true
+        });
+          //角色联动
+           form.on('select(provSel)', function (data) {
+            var id = $('input[name="ids"]').val();
+            if(!id){
+              id = 'undefined';
+            }
+            var rule_id = data.value;
+             admin.req({
+                  url:  layui.setter.public_url+'/auth/groupmenu' //实际使用请改成服务端真实接口
+                  ,data: {id:id,rule_id:rule_id}
+                  ,type:'post'
+                  ,done: function(result){
+                          authtree.render('#LAY-auth-tree-index', result.data, {
+                          inputname: 'rules[]'
+                          ,layfilter: 'lay-check-auth'
+                          // ,autoclose: false
+                          // ,autochecked: false
+                          // ,openchecked: true
+                          ,openall: true
+                          ,autowidth: true
+                        });
+                  }
+              }); 
+          });
+        // PS:使用 form.on() 会引起了事件冒泡延迟的BUG，需要 setTimeout()，并且无法监听全选/全不选
+        // PS:如果开启双击展开配置，form.on()会记录两次点击事件，authtree.on()不会
+        form.on('checkbox(lay-check-auth)', function(data){
+          // 注意这里：需要等待事件冒泡完成，不然获取叶子节点不准确。
+          setTimeout(function(){
+            console.log('监听 form 触发事件数据', data);
+            // 获取选中的叶子节点
+            var leaf = authtree.getLeaf('#LAY-auth-tree-index');
+            console.log('leaf', leaf);
+            // 获取最新选中
+            var lastChecked = authtree.getLastChecked('#LAY-auth-tree-index');
+            console.log('lastChecked', lastChecked);
+            // 获取最新取消
+            var lastNotChecked = authtree.getLastNotChecked('#LAY-auth-tree-index');
+            console.log('lastNotChecked', lastNotChecked);
+          }, 100);
+        });
+        // 使用 authtree.on() 不会有冒泡延迟
+        authtree.on('change(lay-check-auth)', function(data) {
+          console.log('监听 authtree 触发事件数据', data);
+          // 获取所有节点
+          var all = authtree.getAll('#LAY-auth-tree-index');
+          console.log('all', all);
+          // 获取所有已选中节点
+          var checked = authtree.getChecked('#LAY-auth-tree-index');
+          console.log('checked', checked);
+          // 获取所有未选中节点
+          var notchecked = authtree.getNotChecked('#LAY-auth-tree-index');
+          console.log('notchecked', notchecked);
+          // 获取选中的叶子节点
+          var leaf = authtree.getLeaf('#LAY-auth-tree-index');
+          console.log('leaf', leaf);
+          // 获取最新选中
+          var lastChecked = authtree.getLastChecked('#LAY-auth-tree-index');
+          console.log('lastChecked', lastChecked);
+          // 获取最新取消
+          var lastNotChecked = authtree.getLastNotChecked('#LAY-auth-tree-index');
+          console.log('lastNotChecked', lastNotChecked);
+        });
+        authtree.on('deptChange(lay-check-auth)', function(data) {
+          console.log('监听到显示层数改变',data);
+        });
+
+  });
+};
+</script>

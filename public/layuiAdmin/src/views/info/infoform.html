@@ -1,0 +1,382 @@
+<style>
+  .layui-upload-img{width: 92px; height: 92px; margin: 0 10px 10px 0;}
+  </style>
+<div class="layui-form" lay-filter="layuiadmin-form-info" style="padding: 20px 30px 0 0;">
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">会议类别</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template lay-url="{{layui.setter.public_url}}/info/get_type" lay-type="post" lay-done="layui.form.render('select');">
+          <select name="type">
+         {{# 
+          var dataName = layui.setter.response.dataName;
+          layui.each(d[dataName], function(index, item){ }}
+            <option value="{{item.id}}"  {{ d.params.type === item.id ? 'selected' : '' }}>{{item.name}}</option>
+        {{#  }); }}
+        </select>
+      </script>
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">会议名称</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="name" value="{{ d.params.name || '' }}" lay-verify="required" placeholder="请输入会议名称" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+   <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">会议简介</label>
+    <div class="layui-input-inline" style="width: 450px">
+      <script type="text/html" template>
+         <textarea name="content" class="layui-textarea" id="content" lay-verify="content">{{ d.params.content || '' }}</textarea>
+      </script>
+    </div>
+  </div>
+    <div class="layui-form-item">
+      <div class="layui-inline">
+        <label class="layui-form-label">活动日期</label>
+        <div class="layui-input-inline">
+          <script type="text/html" template>
+           <input type="text" class="layui-input" id="test-laydate-start" placeholder="开始日期" lay-verify="required" name="startime" value="{{ d.params.startime || '' }}">
+          </script>
+        </div>
+        <div class="layui-form-mid">
+          -
+        </div>
+        <div class="layui-input-inline">
+           <script type="text/html" template>
+          <input type="text" class="layui-input" id="test-laydate-end" placeholder="结束日期" lay-verify="required" name="endtime" value="{{ d.params.endtime || '' }}">
+          </script>
+        </div>
+      </div>
+    </div>
+
+   <div class="layui-form-item">
+    <label class="layui-form-label">总费用</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="number" name="money" value="{{ d.params.money || '' }}" placeholder="请输入总费用" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">规模</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="scale" value="{{ d.params.scale || '' }}"  placeholder="请输入规模" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">地址</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="address" value="{{ d.params.address || '' }}" placeholder="请输入地址" lay-verify="required" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+    <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">地址简介</label>
+    <div class="layui-input-inline" style="width: 450px">
+      <script type="text/html" template>
+         <textarea name="address_content" class="layui-textarea" lay-verify="address_content" id="address_content">{{ d.params.address_content || '' }}</textarea>
+      </script>
+    </div>
+  </div>
+
+
+      <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">参会资讯</label>
+      </div>
+          <div class="layui-row layui-col-space10 layui-form-item" id="contacts">
+             <script type="text/html" template>
+            {{#  if(d.params.consult_content){ }}
+              {{# layui.each(d.params.consult_content, function(index, item){ }}
+                {{#  if(index == 0){ }}
+                  <div id="muban" class="layui-row layui-col-space10 layui-form-item">
+                        <div class="layui-col-lg5">
+                        <label class="layui-form-label">标题</label>
+                        <div class="layui-input-block">
+                          <input type="text" name="consult_title[]"  value="{{ item.title || '' }}" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                        </div>
+                      </div>
+                       <div class="layui-col-lg5">
+                        <label class="layui-form-label">名称</label>
+                        <div class="layui-input-block">
+                          <input type="text" name="consult_name[]"   value="{{ item.name || '' }}" placeholder="请输入名称" autocomplete="off" class="layui-input">
+                        </div>
+                      </div>
+                        <div class="layui-col-lg5">
+                        <label class="layui-form-label">电话</label>
+                        <div class="layui-input-block">
+                          <input type="text" name="consult_phone[]"  value="{{ item.phone || '' }}" placeholder="请输入电话" autocomplete="off" class="layui-input">
+                        </div>
+                      </div>
+                       <div class="layui-col-lg5">
+                        <label class="layui-form-label">email</label>
+                        <div class="layui-input-block">
+                          <input type="text" name="consult_email[]"  value="{{ item.email || '' }}" placeholder="请输入email" autocomplete="off" class="layui-input">
+                        </div>
+                      </div>
+                      <button type="button" style="width: 35px;height: 35px;border: 1px solid #ccc;text-align: center;margin: 27px 0 0 10px;" id="add">+</button>
+                  </div>
+                {{#  } else { }}
+                   <div  class="layui-row layui-col-space10 layui-form-item con">
+                        <div class="layui-col-lg5">
+                        <label class="layui-form-label">标题</label>
+                        <div class="layui-input-block">
+                          <input type="text" name="consult_title[]"  value="{{ item.title || '' }}" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                        </div>
+                      </div>
+                       <div class="layui-col-lg5">
+                        <label class="layui-form-label">名称</label>
+                        <div class="layui-input-block">
+                          <input type="text" name="consult_name[]"   value="{{ item.name || '' }}" placeholder="请输入名称" autocomplete="off" class="layui-input">
+                        </div>
+                      </div>
+                        <div class="layui-col-lg5">
+                        <label class="layui-form-label">电话</label>
+                        <div class="layui-input-block">
+                          <input type="text" name="consult_phone[]"  value="{{ item.phone || '' }}" placeholder="请输入电话" autocomplete="off" class="layui-input">
+                        </div>
+                      </div>
+                       <div class="layui-col-lg5">
+                        <label class="layui-form-label">email</label>
+                        <div class="layui-input-block">
+                          <input type="text" name="consult_email[]"  value="{{ item.email || '' }}" placeholder="请输入email" autocomplete="off" class="layui-input">
+                        </div>
+                      </div>
+                      <button type="button" style="width: 35px;height: 35px;border: 1px solid #ccc;text-align: center;margin: 27px 0 0 10px;" class="del">-</button>
+                  </div>
+                {{#  } }}
+              {{#  }); }}
+            {{#  } else { }}
+                <div id="muban" class="layui-row layui-col-space10 layui-form-item">
+                      <div class="layui-col-lg5">
+                      <label class="layui-form-label">标题</label>
+                      <div class="layui-input-block">
+                        <input type="text" name="consult_title[]"   placeholder="请输入标题" autocomplete="off" class="layui-input">
+                      </div>
+                    </div>
+                     <div class="layui-col-lg5">
+                      <label class="layui-form-label">名称</label>
+                      <div class="layui-input-block">
+                        <input type="text" name="consult_name[]"   placeholder="请输入名称" autocomplete="off" class="layui-input">
+                      </div>
+                    </div>
+                      <div class="layui-col-lg5">
+                      <label class="layui-form-label">电话</label>
+                      <div class="layui-input-block">
+                        <input type="text" name="consult_phone[]"  placeholder="请输入电话" autocomplete="off" class="layui-input">
+                      </div>
+                    </div>
+                     <div class="layui-col-lg5">
+                      <label class="layui-form-label">email</label>
+                      <div class="layui-input-block">
+                        <input type="text" name="consult_email[]"  placeholder="请输入email" autocomplete="off" class="layui-input">
+                      </div>
+                    </div>
+                    <button type="button" style="width: 35px;height: 35px;border: 1px solid #ccc;text-align: center;margin: 27px 0 0 10px;" id="add">+</button>
+                </div>
+           {{#  } }}
+          </script>
+        </div>
+  
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">pc导图</label>
+    <div class="layui-input-inline">
+     <div class="layui-upload">
+        <button type="button" class="layui-btn" id="pc_imgs">上传图片</button>
+              <div class="layui-upload-list">
+                  <script type="text/html" template>
+                      {{#  if(d.params.pc_img){ }}
+                         <img class="layui-upload-img" id="pc_img-img" src="{{ d.params.pc_img}}?x-oss-process=image/resize,h_300,w_300">
+                      {{#  } else { }}
+                          <img class="layui-upload-img" id="pc_img-img">
+                      {{#  } }}
+                  </script>
+                  <p id="pc_img-upload-demoText"></p>
+              </div>
+        </div> 
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">WAP导图</label>
+    <div class="layui-input-inline">
+     <div class="layui-upload">
+        <button type="button" class="layui-btn" id="wap_imgs">上传图片</button>
+              <div class="layui-upload-list">
+                  <script type="text/html" template>
+                      {{#  if(d.params.wap_img){ }}
+                         <img class="layui-upload-img" id="wap_img-img" src="{{ d.params.wap_img}}?x-oss-process=image/resize,h_300,w_300">
+                      {{#  } else { }}
+                          <img class="layui-upload-img" id="wap_img-img">
+                      {{#  } }}
+                  </script>
+                  <p id="wap_img-upload-demoText"></p>
+              </div>
+        </div> 
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">分销开关</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="checkbox" lay-filter="switch" name="is_fx" {{ d.params.is_fx == 1 ? 'checked' : '' }} lay-skin="switch" lay-text="是|否">
+      </script>
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">小程序开关</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="checkbox" lay-filter="switch" name="is_xcx" {{ d.params.is_xcx == 1 ? 'checked' : '' }} lay-skin="switch" lay-text="是|否">
+      </script>
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">状态</label>
+    <div class="layui-input-inline fp">
+      <script type="text/html" template>
+        <input type="checkbox" lay-filter="switch" name="status" {{ d.params.status == 1 ? 'checked' : '' }} lay-skin="switch" lay-text="正常|禁用">
+      </script>
+    </div>
+  </div>
+   <script type="text/html" template>
+      <input type="hidden" name="id" value="{{ d.params.id || '' }}">
+      <input type="hidden" name="wap_img" value="{{ d.params.wap_img || '' }}">
+      <input type="hidden" name="pc_img" value="{{ d.params.pc_img || '' }}">
+   </script>
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-user-back-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+<script>
+
+ $(document).on('click','#add',function(){
+    var html = '<div class="layui-row layui-col-space10 layui-form-item con">';
+    html += $('#muban').html();
+    html += '</div>';
+    re   = new RegExp('id="add"',"i");
+    html = html.replace(re,'class="del"');
+    html = html.replace(/\+/i, "-");
+  // var html = '<div class="con"><label class="col-sm-2">参会资讯</label>';
+  //   html+=  '<div id="infoxcx-contacts">';
+  //   html+=  ' 标题：<label><input type="text" name="Info[contacts][contacts_title][]" class="form-control"></label>';
+  //   html+=  ' 名称：<label><input type="text" name="Info[contacts][contacts_name][]" class="form-control"></label>';
+  //   html+=  ' 电话：<label><input type="text" name="Info[contacts][contacts_phone][]" class="form-control"></label>';
+  //   html+=  ' email：<label><input type="text" name="Info[contacts][contacts_email][]" class="form-control"></label>';
+  //   html+=  '  <button type="button" style="width: 35px;height: 35px;border: 1px solid #ccc;text-align: center;margin: 27px 0 0 10px;" class="del">-</button>';
+  //   html+=  '</div>';
+  $('#contacts').append(html);
+})
+$(document).on('click','.del',function(){
+  $(this).parents('.con').remove();
+})
+layui.use(['admin', 'form','laydate','layedit','upload'], function(){
+  var layedit = layui.layedit;
+  var laydate = layui.laydate;
+  var $ = layui.$
+  ,form = layui.form
+  ,upload = layui.upload;
+    layedit.set({
+    uploadImage: {
+        url: layui.setter.public_url+'/api/content_upload' //接口url
+        ,type: 'post' //默认post
+        ,done: function(res){
+        //如果上传失败
+          if(res.code > 0){
+            return layer.msg('上传失败');
+          }
+          //上传成功
+          $('input[name="pc_img"]').val(res.data.url)
+        }  
+      }
+    });
+  var index = layedit.build('content'); //建立编辑器
+  var index1= layedit.build('address_content'); //建立编辑器
+
+  form.verify({
+      content: function(value){
+          layedit.sync(index);
+      }
+      ,address_content: function(value){
+          layedit.sync(index1);
+      }
+  });
+
+  //普通图片上传
+  var uploadInst = upload.render({
+    elem: '#pc_imgs'
+    ,url: layui.setter.public_url+'/api/upload'
+    ,accept:'images'
+    ,field:'pc_imgs'
+    ,headers: {
+    accesstoken: layui.data('layuiAdmin').accesstoken,
+    filename:'pc_imgs',
+    }  
+    ,before: function(obj){
+      //预读本地文件示例，不支持ie8
+      obj.preview(function(index, file, result){
+        $('#pc_img-img').attr('src', result); //图片链接（base64）
+      });
+    }
+    ,done: function(res){
+      //如果上传失败
+      if(res.code > 0){
+        return layer.msg('上传失败');
+      }
+      //上传成功
+      $('input[name="pc_img"]').val(res.data.url)
+    }
+    ,error: function(){
+      //演示失败状态，并实现重传
+      var demoText = $('#pc_img-upload-demoText');
+      demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+      demoText.find('.demo-reload').on('click', function(){
+        uploadInst.upload();
+      });
+    }
+  });
+
+    //普通图片上传
+  var uploadInsts = upload.render({
+    elem: '#wap_imgs'
+    ,url: layui.setter.public_url+'/api/upload'
+    ,accept:'images'
+    ,field:'wap_imgs'
+    ,headers: {
+    accesstoken: layui.data('layuiAdmin').accesstoken,
+    filename:'wap_imgs',
+    }  
+    ,before: function(obj){
+      //预读本地文件示例，不支持ie8
+      obj.preview(function(index, file, result){
+        $('#wap_img-img').attr('src', result); //图片链接（base64）
+      });
+    }
+    ,done: function(res){
+      //如果上传失败
+      if(res.code > 0){
+        return layer.msg('上传失败');
+      }
+      //上传成功
+      $('input[name="wap_img"]').val(res.data.url)
+    }
+    ,error: function(){
+      //演示失败状态，并实现重传
+      var demoText = $('#wap_img-upload-demoText');
+      demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+      demoText.find('.demo-reload').on('click', function(){
+        uploadInsts.upload();
+      });
+    }
+  });
+
+});
+</script>
